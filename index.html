@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+ <head>
+  <meta charset="utf-8">
+  <title>Название страницы</title>
+  <style>
+    /*CSS-код*/
+  </style>
+  <script>
+function press() {
+    let A = document.getElementById("angleA").value;
+    let B = document.getElementById("angleB").value;
+    let AC = document.getElementById("sideAC").value;
+    let BC = document.getElementById("sideBC").value;
+    let AB = document.getElementById("sideAB").value;
+    let log = document.getElementById("log");
+    log.textContent = "A="+A+" B="+B+" AC="+AC+" BC="+BC+" AB="+AB;
+    if (A !== "" && B === "" ){
+        B=String(90-Number(A));
+        log.innerHTML+="<br>По известному углу А получаем неизвестный угол B по формуле B=90-A=90-"+A+"="+B;
+    }
+    if (B !== "" && A === "" ){
+        A=String(90-Number(B));
+        log.innerHTML+="<br>По известному углу B получаем неизвестный угол A по формуле A=90-B=90-"+B+"="+A;
+    }
+    if (AC !== "" && BC !== "" && AB === ""){
+        AB=String(Math.sqrt(Number(AC)*Number(AC)+Number(BC)*Number(BC)))
+        log.innerHTML+="<br>По известным катетам AC и BC получаем гипотенузу AB по формуле AB=&#8730;(AC<sup>2</sup>+BC<sup>2</sup>)=&#8730;("+AC+"<sup>2</sup>+"+BC+"<sup>2</sup>)=&#8730;("+Number(AC)*Number(AC)+"+"+Number(BC)*Number(BC)+")=&#8730;"+(Number(AC)*Number(AC)+Number(BC)*Number(BC))+"="+AB;
+    }
+}
+  </script>
+ </head>
+ <body>
+  <img src="example.png" width="500" height="500" alt="Прямоугольный треугольник ABC с прямым углом C">
+  <p class="ИмяКласса1 ИмяКласса2">Введите (в градусах) угол A: <input id="angleA" type="text"> и угол B: <input id="angleB" type="text"> </p>
+  <p class="ИмяКласса1 ИмяКласса2">Введите длину катета AС: <input id="sideAC" type="text">, длину катета BC: <input id="sideBC" type="text">, длину гипотенузы AB: <input id="sideAB" type="text"> </p>
+  <p><input type="button" onclick="press()" value="Рассчитать"></p>
+  <p id="log">Здесь будет расчет</p>
+  <p>Здесь будет рисунок на canvas</p>
+ </body>
+</html>
