@@ -43,6 +43,16 @@ function tanDegrees(angle){
     }
     return Math.tan(degreesToRadians(angle));
 }
+function isNumericOrEmpty(s){
+    if (!(typeof s === 'string' || s instanceof String)){
+        throw "s должна быть строчкой";
+    }
+    return s==="" || !isNaN(Number(s));
+}
+function almostEqual(a,b){
+    const eps = 1e-14;
+    return a>=b*(1-eps) && a<= b*(1+eps) || b>=a*(1-eps) && b<= a*(1+eps);
+}
 function press() {
     let A = document.getElementById("angleA").value;
     let B = document.getElementById("angleB").value;
@@ -51,18 +61,89 @@ function press() {
     let AB = document.getElementById("sideAB").value;
     let log = document.getElementById("log");
     log.textContent = "A="+A+" B="+B+" AC="+AC+" BC="+BC+" AB="+AB;
-    //TODO сделать проверку, что если поле не пустое то в нем число
-    //TODO сделать проверку, что углы больше 0 и меньше 90, а стороны строго положительны
-    //TODO сделать проверку, что если какие-то данные избыточные, то они корректны или почти корректны: A+B==90, sin,cos,tan
-    //TODO если заданы только углы, то сообщить о неоднозначности и продолжить работать с одной стороной 100
-    //TODO если задана только одна сторона то сообщить что нельзя восстановить треугольник
-    if (AC !== "" && BC !== "" && AB !== "") {
-        let left = Number(AC)*Number(AC)+Number(BC)*Number(BC);
-        let right = Number(AB)*Number(AB);
-        if (left > right*(1+1e-14) || left < right*(1-1e-14)) {
-            log.innerHTML+="<br>Ошибка: для введенных катетов и гепотенузы не выполняется теорема Пифагора AC<sup>2</sup>+BC<sup>2</sup>=AB<sup>2</sup>, а именно AB<sup>2</sup>="+AB+"<sup>2</sup>="+right+", AC<sup>2</sup>+BC<sup>2</sup>="+AC+"<sup>2</sup>+"+BC+"<sup>2</sup>="+Number(AC)*Number(AC)+"+"+Number(BC)*Number(BC)+"="+left;
-            return;
-        }
+    if (!isNumericOrEmpty(A)){
+        log.innerHTML+="<br>Ошибка: поле A не пустое и не число";
+        return;
+    }
+    if (!isNumericOrEmpty(B)){
+        log.innerHTML+="<br>Ошибка: поле B не пустое и не число";
+        return;
+    }
+    if (!isNumericOrEmpty(AC)){
+        log.innerHTML+="<br>Ошибка: поле AC не пустое и не число";
+        return;
+    }
+    if (!isNumericOrEmpty(BC)){
+        log.innerHTML+="<br>Ошибка: поле BC не пустое и не число";
+        return;
+    }
+    if (!isNumericOrEmpty(AB)){
+        log.innerHTML+="<br>Ошибка: поле AB не пустое и не число";
+        return;
+    }
+    if (A !=="" && (Number(A) <= 0 || Number(A) >= 90)) {
+        log.innerHTML+="<br>Ошибка: ожидается значение угла A больше 0 и меньше 90, получено: "+Number(A);
+        return;
+    }
+    if (B !=="" && (Number(B) <= 0 || Number(B) >= 90)) {
+        log.innerHTML+="<br>Ошибка: ожидается значение угла B больше 0 и меньше 90, получено: "+Number(B);
+        return;
+    }
+    if (AC !== "" && Number(AC) <= 0) {
+        log.innerHTML+="<br>Ошибка: ожидается положительное значение катета AC, получено: "+Number(AC);
+        return;
+    }
+    if (BC !== "" && Number(BC) <= 0) {
+        log.innerHTML+="<br>Ошибка: ожидается положительное значение катета BC, получено: "+Number(BC);
+        return;
+    }
+    if (AB !== "" && Number(AB) <= 0) {
+        log.innerHTML+="<br>Ошибка: ожидается положительное значение гипотенузы AB, получено: "+Number(AB);
+        return;
+    }
+    if (A+B+AC+BC+AB===""){
+        log.innerHTML+="<br>Введите две стороны или угол и сторону.";
+        return;
+    }
+    if (AC!=="" && AB+BC+A+B==="" || AB!=="" && BC+AC+A+B==="" || BC!=="" && AB+AC+A+B===""){
+        log.innerHTML+="<br>Ошибка: недостаточное количество значений - введена только одна сторона. Введите две стороны или угол и сторону.";
+        return;
+    }
+    if (A!=="" && B!=="" && Number(A)+Number(B)!==90){
+        log.innerHTML+="<br>Ошибка: для введенных углов не выполняется A+B=90, а именно A+B="+Number(A)+"+"+Number(B)+"="+(Number(A)+Number(B));
+        return;
+    }
+    if (A!=="" && AC!=="" && BC!=="" && !almostEqual(tanDegrees(A),Number(BC)/Number(AC))){
+        log.innerHTML+="<br>Ошибка: для введенных данных не соблюдается tan(A)=BC/AC, а именно tan(A)="+tanDegrees(A)+", BC/AC="+Number(BC)+"/"+Number(AC)+"="+Number(BC)/Number(AC);
+        return;
+    }
+    if (B!=="" && AC!=="" && BC!=="" && !almostEqual(tanDegrees(B),Number(AC)/Number(BC))){
+        log.innerHTML+="<br>Ошибка: для введенных данных не соблюдается tan(B)=AC/BC, а именно tan(B)="+tanDegrees(B)+", AC/BC="+Number(AC)+"/"+Number(BC)+"="+Number(AC)/Number(BC);
+        return;
+    }
+    if (A!=="" && AC!=="" && AB!=="" && !almostEqual(cosDegrees(A),Number(AC)/Number(AB))){
+        log.innerHTML+="<br>Ошибка: для введенных данных не соблюдается cos(A)=AC/AB, а именно cos(A)="+cosDegrees(A)+", AC/AB="+Number(AC)+"/"+Number(AB)+"="+Number(AC)/Number(AB);
+        return;
+    }
+    if (B!=="" && BC!=="" && AB!=="" && !almostEqual(cosDegrees(B),Number(BC)/Number(AB))){
+        log.innerHTML+="<br>Ошибка: для введенных данных не соблюдается cos(B)=BC/AB, а именно cos(B)="+cosDegrees(B)+", BC/AB="+Number(BC)+"/"+Number(AB)+"="+Number(BC)/Number(AB);
+        return;
+    }
+    if (A!=="" && BC!=="" && AB!=="" && !almostEqual(sinDegrees(A),Number(BC)/Number(AB))){
+        log.innerHTML+="<br>Ошибка: для введенных данных не соблюдается sin(A)=BC/AB, а именно sin(A)="+sinDegrees(A)+", BC/AB="+Number(BC)+"/"+Number(AB)+"="+Number(BC)/Number(AB);
+        return;
+    }
+    if (B!=="" && AC!=="" && AB!=="" && !almostEqual(sinDegrees(B),Number(AC)/Number(AB))){
+        log.innerHTML+="<br>Ошибка: для введенных данных не соблюдается sin(B)=AC/AB, а именно sin(B)="+sinDegrees(B)+", AC/AB="+Number(AC)+"/"+Number(AB)+"="+Number(AC)/Number(AB);
+        return;
+    }
+    if (AC !== "" && BC !== "" && AB !== "" && !almostEqual(Number(AC)*Number(AC)+Number(BC)*Number(BC), Number(AB)*Number(AB))) {
+        log.innerHTML+="<br>Ошибка: для введенных катетов и гепотенузы не выполняется теорема Пифагора AC<sup>2</sup>+BC<sup>2</sup>=AB<sup>2</sup>, а именно AB<sup>2</sup>="+AB+"<sup>2</sup>="+(Number(AB)*Number(AB))+", AC<sup>2</sup>+BC<sup>2</sup>="+AC+"<sup>2</sup>+"+BC+"<sup>2</sup>="+Number(AC)*Number(AC)+"+"+Number(BC)*Number(BC)+"="+(Number(AC)*Number(AC)+Number(BC)*Number(BC));
+        return;
+    }
+    if (AB+AC+BC===""){
+        log.innerHTML+="<br>Введены только углы, последующие вычисления будут произведены при AB=100";
+        AB="100";
     }
     if (A === "" && B === ""){
         if (AB !== "" && AC !== ""){
@@ -155,8 +236,13 @@ function press() {
  </head>
  <body>
   <img src="example.png" width="500" height="500" alt="Прямоугольный треугольник ABC с прямым углом C">
-  <p class="ИмяКласса1 ИмяКласса2">Введите (в градусах) угол A: <input id="angleA" type="text"> и угол B: <input id="angleB" type="text"> </p>
-  <p class="ИмяКласса1 ИмяКласса2">Введите длину катета AС: <input id="sideAC" type="text">, длину катета BC: <input id="sideBC" type="text">, длину гипотенузы AB: <input id="sideAB" type="text"> </p>
+  <p class="ИмяКласса1 ИмяКласса2">Введите на выбор:</p>
+  <ul>
+   <li>один угол и одну сторону</li>
+   <li>две стороны</li>
+  </ul>
+  <p class="ИмяКласса1 ИмяКласса2">Угол A в градусах: <input id="angleA" type="text"> и угол B в градусах: <input id="angleB" type="text"> </p>
+  <p class="ИмяКласса1 ИмяКласса2">Длина катета AС: <input id="sideAC" type="text">, длина катета BC: <input id="sideBC" type="text">, длина гипотенузы AB: <input id="sideAB" type="text"> </p>
   <p><input type="button" onclick="press()" value="Рассчитать"></p>
   <p id="log">Здесь будет расчет</p>
   <p>Здесь будет рисунок на canvas</p>
