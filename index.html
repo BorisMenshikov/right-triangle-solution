@@ -53,7 +53,8 @@ function almostEqual(a,b) {
     const eps = 1e-14;
     return a>=b*(1-eps) && a<= b*(1+eps) || b>=a*(1-eps) && b<= a*(1+eps);
 }
-function calculateAll(A,B,AC,BC,AB) { // Возвращает объект с полями A,B,AC,BC,AB,log.
+function calculateAll(known) { // Возвращает объект с полями A,B,AC,BC,AB,log.
+    let {A,B,AC,BC,AB} = known;
     let log = "A="+A+" B="+B+" AC="+AC+" BC="+BC+" AB="+AB;
     if (!isNumericOrEmpty(A)) {
         log+="<br>Ошибка: поле A не пустое и не число";
@@ -232,15 +233,28 @@ function calculateAll(A,B,AC,BC,AB) { // Возвращает объект с п
     return {"A":A, "B":B, "AC":AC, "BC":BC, "AB":AB, "log":log};
 }
 function press() {
-    let A = document.getElementById("angleA").value;
-    let B = document.getElementById("angleB").value;
-    let AC = document.getElementById("sideAC").value;
-    let BC = document.getElementById("sideBC").value;
-    let AB = document.getElementById("sideAB").value;
-    let log = "";
-    ({A,B,AC,BC,AB,log} = calculateAll(A,B,AC,BC,AB));
+    let {A,B,AC,BC,AB,log} = calculateAll({
+        "A":document.getElementById("angleA").value,
+        "B":document.getElementById("angleB").value,
+        "AC":document.getElementById("sideAC").value,
+        "BC":document.getElementById("sideBC").value,
+        "AB":document.getElementById("sideAB").value});
     document.getElementById("log").innerHTML = log;
 }
+function test1(args,expectedResult) {
+    let result = calculateAll(args);
+    for (const field in expectedResult) {
+        if (expectedResult[field] !== result[field]) {
+            console.log({args,expectedResult,result});
+            throw "Самотестирование не пройдено";
+        }
+    }
+}
+function selfTest() {
+    test1({"A":"a","B":"","AC":"","BC":"","AB":""},{"A":"a","B":"","AC":"","BC":"","AB":"","log":"A=a B= AC= BC= AB=<br>Ошибка: поле A не пустое и не число"});
+    console.log("Самотестирование пройдено");
+}
+selfTest();
   </script>
  </head>
  <body>
