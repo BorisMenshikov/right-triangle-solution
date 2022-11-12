@@ -53,188 +53,193 @@ function almostEqual(a,b) {
     const eps = 1e-14;
     return a>=b*(1-eps) && a<= b*(1+eps) || b>=a*(1-eps) && b<= a*(1+eps);
 }
+function calculateAll(A,B,AC,BC,AB) { // Возвращает объект с полями A,B,AC,BC,AB,log.
+    let log = "A="+A+" B="+B+" AC="+AC+" BC="+BC+" AB="+AB;
+    if (!isNumericOrEmpty(A)) {
+        log+="<br>Ошибка: поле A не пустое и не число";
+        return {"A":A, "B":B, "AC":AC, "BC":BC, "AB":AB, "log":log};
+    }
+    if (!isNumericOrEmpty(B)) {
+        log+="<br>Ошибка: поле B не пустое и не число";
+        return {"A":A, "B":B, "AC":AC, "BC":BC, "AB":AB, "log":log};
+    }
+    if (!isNumericOrEmpty(AC)) {
+        log+="<br>Ошибка: поле AC не пустое и не число";
+        return {"A":A, "B":B, "AC":AC, "BC":BC, "AB":AB, "log":log};
+    }
+    if (!isNumericOrEmpty(BC)) {
+        log+="<br>Ошибка: поле BC не пустое и не число";
+        return {"A":A, "B":B, "AC":AC, "BC":BC, "AB":AB, "log":log};
+    }
+    if (!isNumericOrEmpty(AB)) {
+        log+="<br>Ошибка: поле AB не пустое и не число";
+        return {"A":A, "B":B, "AC":AC, "BC":BC, "AB":AB, "log":log};
+    }
+    if (A !=="" && (Number(A) <= 0 || Number(A) >= 90)) {
+        log+="<br>Ошибка: ожидается значение угла A больше 0 и меньше 90, получено: "+Number(A);
+        return {"A":A, "B":B, "AC":AC, "BC":BC, "AB":AB, "log":log};
+    }
+    if (B !=="" && (Number(B) <= 0 || Number(B) >= 90)) {
+        log+="<br>Ошибка: ожидается значение угла B больше 0 и меньше 90, получено: "+Number(B);
+        return {"A":A, "B":B, "AC":AC, "BC":BC, "AB":AB, "log":log};
+    }
+    if (AC !== "" && Number(AC) <= 0) {
+        log+="<br>Ошибка: ожидается положительное значение катета AC, получено: "+Number(AC);
+        return {"A":A, "B":B, "AC":AC, "BC":BC, "AB":AB, "log":log};
+    }
+    if (BC !== "" && Number(BC) <= 0) {
+        log+="<br>Ошибка: ожидается положительное значение катета BC, получено: "+Number(BC);
+        return {"A":A, "B":B, "AC":AC, "BC":BC, "AB":AB, "log":log};
+    }
+    if (AB !== "" && Number(AB) <= 0) {
+        log+="<br>Ошибка: ожидается положительное значение гипотенузы AB, получено: "+Number(AB);
+        return {"A":A, "B":B, "AC":AC, "BC":BC, "AB":AB, "log":log};
+    }
+    if (A+B+AC+BC+AB==="") {
+        log+="<br>Введите две стороны или угол и сторону.";
+        return {"A":A, "B":B, "AC":AC, "BC":BC, "AB":AB, "log":log};
+    }
+    if (AC!=="" && AB+BC+A+B==="" || AB!=="" && BC+AC+A+B==="" || BC!=="" && AB+AC+A+B==="") {
+        log+="<br>Ошибка: недостаточное количество значений - введена только одна сторона. Введите две стороны или угол и сторону.";
+        return {"A":A, "B":B, "AC":AC, "BC":BC, "AB":AB, "log":log};
+    }
+    if (A!=="" && B!=="" && Number(A)+Number(B)!==90) {
+        log+="<br>Ошибка: для введенных углов не выполняется A+B=90, а именно A+B="+Number(A)+"+"+Number(B)+"="+(Number(A)+Number(B));
+        return {"A":A, "B":B, "AC":AC, "BC":BC, "AB":AB, "log":log};
+    }
+    if (A!=="" && AC!=="" && BC!=="" && !almostEqual(tanDegrees(A),Number(BC)/Number(AC))) {
+        log+="<br>Ошибка: для введенных данных не соблюдается tan(A)=BC/AC, а именно tan(A)="+tanDegrees(A)+", BC/AC="+Number(BC)+"/"+Number(AC)+"="+Number(BC)/Number(AC);
+        return {"A":A, "B":B, "AC":AC, "BC":BC, "AB":AB, "log":log};
+    }
+    if (B!=="" && AC!=="" && BC!=="" && !almostEqual(tanDegrees(B),Number(AC)/Number(BC))) {
+        log+="<br>Ошибка: для введенных данных не соблюдается tan(B)=AC/BC, а именно tan(B)="+tanDegrees(B)+", AC/BC="+Number(AC)+"/"+Number(BC)+"="+Number(AC)/Number(BC);
+        return {"A":A, "B":B, "AC":AC, "BC":BC, "AB":AB, "log":log};
+    }
+    if (A!=="" && AC!=="" && AB!=="" && !almostEqual(cosDegrees(A),Number(AC)/Number(AB))) {
+        log+="<br>Ошибка: для введенных данных не соблюдается cos(A)=AC/AB, а именно cos(A)="+cosDegrees(A)+", AC/AB="+Number(AC)+"/"+Number(AB)+"="+Number(AC)/Number(AB);
+        return {"A":A, "B":B, "AC":AC, "BC":BC, "AB":AB, "log":log};
+    }
+    if (B!=="" && BC!=="" && AB!=="" && !almostEqual(cosDegrees(B),Number(BC)/Number(AB))) {
+        log+="<br>Ошибка: для введенных данных не соблюдается cos(B)=BC/AB, а именно cos(B)="+cosDegrees(B)+", BC/AB="+Number(BC)+"/"+Number(AB)+"="+Number(BC)/Number(AB);
+        return {"A":A, "B":B, "AC":AC, "BC":BC, "AB":AB, "log":log};
+    }
+    if (A!=="" && BC!=="" && AB!=="" && !almostEqual(sinDegrees(A),Number(BC)/Number(AB))) {
+        log+="<br>Ошибка: для введенных данных не соблюдается sin(A)=BC/AB, а именно sin(A)="+sinDegrees(A)+", BC/AB="+Number(BC)+"/"+Number(AB)+"="+Number(BC)/Number(AB);
+        return {"A":A, "B":B, "AC":AC, "BC":BC, "AB":AB, "log":log};
+    }
+    if (B!=="" && AC!=="" && AB!=="" && !almostEqual(sinDegrees(B),Number(AC)/Number(AB))) {
+        log+="<br>Ошибка: для введенных данных не соблюдается sin(B)=AC/AB, а именно sin(B)="+sinDegrees(B)+", AC/AB="+Number(AC)+"/"+Number(AB)+"="+Number(AC)/Number(AB);
+        return {"A":A, "B":B, "AC":AC, "BC":BC, "AB":AB, "log":log};
+    }
+    if (AC !== "" && BC !== "" && AB !== "" && !almostEqual(Number(AC)*Number(AC)+Number(BC)*Number(BC), Number(AB)*Number(AB))) {
+        log+="<br>Ошибка: для введенных катетов и гепотенузы не выполняется теорема Пифагора AC<sup>2</sup>+BC<sup>2</sup>=AB<sup>2</sup>, а именно AB<sup>2</sup>="+AB+"<sup>2</sup>="+(Number(AB)*Number(AB))+", AC<sup>2</sup>+BC<sup>2</sup>="+AC+"<sup>2</sup>+"+BC+"<sup>2</sup>="+Number(AC)*Number(AC)+"+"+Number(BC)*Number(BC)+"="+(Number(AC)*Number(AC)+Number(BC)*Number(BC));
+        return {"A":A, "B":B, "AC":AC, "BC":BC, "AB":AB, "log":log};
+    }
+    if (AB+AC+BC==="") {
+        log+="<br>Введены только углы, последующие вычисления будут произведены при AB=100";
+        AB="100";
+    }
+    if (A === "" && B === "") {
+        if (AB !== "" && AC !== "") {
+            B=String(asinDegrees(Number(AC)/Number(AB)));
+            log+="<br>Катет AC и гипотенуза AB связаны с углом B формулой sin(B)=AC/AB, отсюда B=arcsin(AC/AB)=arcsin("+Number(AC)+"/"+Number(AB)+")=arcsin("+Number(AC)/Number(AB)+")="+B;
+            A=String(acosDegrees(Number(AC)/Number(AB)));
+            log+="<br>Катет AC и гипотенуза AB связаны с углом A формулой cos(A)=AC/AB, отсюда A=arccos(AC/AB)=arccos("+Number(AC)+"/"+Number(AB)+")=arccos("+Number(AC)/Number(AB)+")="+A;
+        }else if (AB !== "" && BC !== "") {
+            A=String(asinDegrees(Number(BC)/Number(AB)));
+            log+="<br>Катет BC и гипотенуза AB связаны с углом A формулой sin(A)=BC/AB, отсюда A=arcsin(BC/AB)=arcsin("+Number(BC)+"/"+Number(AB)+")=arcsin("+Number(BC)/Number(AB)+")="+A;
+            B=String(acosDegrees(Number(BC)/Number(AB)));
+            log+="<br>Катет BC и гипотенуза AB связаны с углом B формулой cos(B)=BC/AB, отсюда B=arccos(BC/AB)=arccos("+Number(BC)+"/"+Number(AB)+")=arccos("+Number(BC)/Number(AB)+")="+B;
+        }else if (BC !== "" && AC !== "") {
+            B=String(atanDegrees(Number(AC)/Number(BC)));
+            log+="<br>Катеты AC и BC связаны с углом B формулой tan(B)=AC/BС, отсюда B=arctan(AC/BC)=arctan("+Number(AC)+"/"+Number(BC)+")=arctan("+Number(AC)/Number(BC)+")="+B;
+            A=String(atanDegrees(Number(BC)/Number(AC)));
+            log+="<br>Катеты AC и BC связаны с углом A формулой tan(A)=BC/AC, отсюда A=arctan(BC/AC)=arctan("+Number(BC)+"/"+Number(AC)+")=arctan("+Number(BC)/Number(AC)+")="+A;
+        }
+    }
+    if (A !== "") {
+        if (B === "") {
+            B=String(90-Number(A));
+            log+="<br>Углы A и B связаны формулой A+B=90, отсюда B=90-A=90-"+A+"="+B;
+        }
+        if (AC !== "" && AB === "") {
+            AB=String(Number(AC)/cosDegrees(A));
+            log+="<br>Катет AC и гипотенуза AB связаны с углом A формулой cos(A)=AC/AB, отсюда AB=AC/cos(A)="+Number(AC)+"/cos("+A+")="+Number(AC)+"/"+cosDegrees(A)+"="+AB;
+        }
+        if (AC !== "" && BC === "") {
+            BC=String(Number(AC)*tanDegrees(A));
+            log+="<br>Катеты AC и BC связаны с углом A формулой tan(A)=BC/AC, отсюда BС=AC*tan(A)="+Number(AC)+"*tan("+A+")="+Number(AC)+"*"+tanDegrees(A)+"="+BC;
+        }
+        if (BC !== "" && AB === "") {
+            AB=String(Number(BC)/sinDegrees(A));
+            log+="<br>Катет BC и гипотенуза AB связаны с углом A формулой sin(A)=BC/AB, отсюда AB=BC/sin(A)="+Number(BC)+"/sin("+A+")="+Number(BC)+"/"+sinDegrees(A)+"="+AB;
+        }
+        if (BC !== "" && AC === "") {
+            AC=String(Number(BC)/tanDegrees(A));
+            log+="<br>Катеты AC и BC связаны с углом A формулой tan(A)=BC/AC, отсюда AС=BC/tan(A)="+Number(BC)+"/tan("+A+")="+Number(BC)+"/"+tanDegrees(A)+"="+AC;
+        }
+        if (AB !== "" && AC === "") {
+            AC=String(Number(AB)*cosDegrees(A));
+            log+="<br>Катет AC и гипотенуза AB связаны с углом A формулой cos(A)=AC/AB, отсюда AС=AB*cos(A)="+Number(AB)+"*cos("+A+")="+Number(AB)+"*"+cosDegrees(A)+"="+AC;
+        }
+        if (AB !== "" && BC === "") {
+            BC=String(Number(AB)*sinDegrees(A));
+            log+="<br>Катет BC и гипотенуза AB связаны с углом A формулой sin(A)=BC/AB, отсюда BС=AB*sin(A)="+Number(AB)+"*sin("+A+")="+Number(AB)+"*"+sinDegrees(A)+"="+BC;
+        }
+    }
+    if (B !== "") {
+        if (A === "") {
+            A=String(90-Number(B));
+            log+="<br>Углы A и B связаны формулой A+B=90, отсюда A=90-B=90-"+B+"="+A;
+        }
+        if (AC !== "" && AB === "") {
+            AB=String(Number(AC)/sinDegrees(B));
+            log+="<br>Катет AC и гипотенуза AB связаны с углом B формулой sin(B)=AC/AB, отсюда AB=AC/sin(B)="+Number(AC)+"/sin("+B+")="+Number(AC)+"/"+sinDegrees(B)+"="+AB;
+        }
+        if (AC !== "" && BC === "") {
+            BC=String(Number(AC)/tanDegrees(B));
+            log+="<br>Катеты AC и BC связаны с углом B формулой tan(B)=AC/BC, отсюда BС=AC/tan(B)="+Number(AC)+"/tan("+B+")="+Number(AC)+"/"+tanDegrees(B)+"="+BC;
+        }
+        if (BC !== "" && AB === "") {
+            AB=String(Number(BC)/cosDegrees(B));
+            log+="<br>Катет BC и гипотенуза AB связаны с углом B формулой cos(B)=BC/AB, отсюда AB=BC/cos(B)="+Number(BC)+"/cos("+B+")="+Number(BC)+"/"+cosDegrees(B)+"="+AB;
+        }
+        if (BC !== "" && AC === "") {
+            AC=String(Number(BC)*tanDegrees(B));
+            log+="<br>Катеты AC и BC связаны с углом B формулой tan(B)=AC/BC, отсюда AС=BC*tan(B)="+Number(BC)+"*tan("+B+")="+Number(BC)+"*"+tanDegrees(B)+"="+AC;
+        }
+        if (AB !== "" && AC === "") {
+            AC=String(Number(AB)*sinDegrees(B));
+            log+="<br>Катет AC и гипотенуза AB связаны с углом B формулой sin(B)=AC/AB, отсюда AС=AB*sin(B)="+Number(AB)+"*sin("+B+")="+Number(AB)+"*"+sinDegrees(B)+"="+AC;
+        }
+        if (AB !== "" && BC === "") {
+            BC=String(Number(AB)*cosDegrees(B));
+            log+="<br>Катет BC и гипотенуза AB связаны с углом B формулой cos(B)=BC/AB, отсюда BС=AB*cos(B)="+Number(AB)+"*cos("+B+")="+Number(AB)+"*"+cosDegrees(B)+"="+BC;
+        }
+    }
+    if (AC !== "" && BC !== "" && AB === "") {
+        AB=String(Math.sqrt(Number(AC)*Number(AC)+Number(BC)*Number(BC)))
+        log+="<br>Катеты AC и BC связаны с гипотенузой AB формулой AC<sup>2</sup>+BC<sup>2</sup>=AB<sup>2</sup>, отсюда AB=&#8730;(AC<sup>2</sup>+BC<sup>2</sup>)=&#8730;("+AC+"<sup>2</sup>+"+BC+"<sup>2</sup>)=&#8730;("+Number(AC)*Number(AC)+"+"+Number(BC)*Number(BC)+")=&#8730;"+(Number(AC)*Number(AC)+Number(BC)*Number(BC))+"="+AB;
+    }
+    if (AB !== "" && BC !== "" && AC === "") {
+        AC=String(Math.sqrt(Number(AB)*Number(AB)-Number(BC)*Number(BC)))
+        log+="<br>Катеты AC и BC связаны с гипотенузой AB формулой AC<sup>2</sup>+BC<sup>2</sup>=AB<sup>2</sup>, то есть AС<sup>2</sup>=AB<sup>2</sup>-BC<sup>2</sup>, отсюда AС=&#8730;(AB<sup>2</sup>-BC<sup>2</sup>)=&#8730;("+AB+"<sup>2</sup>-"+BC+"<sup>2</sup>)=&#8730;("+Number(AB)*Number(AB)+"-"+Number(BC)*Number(BC)+")=&#8730;"+(Number(AB)*Number(AB)-Number(BC)*Number(BC))+"="+AC;
+    }
+    if (AB !== "" && AC !== "" && BC === "") {
+        BC=String(Math.sqrt(Number(AB)*Number(AB)-Number(AC)*Number(AC)))
+        log+="<br>Катеты AC и BC связаны с гипотенузой AB формулой AC<sup>2</sup>+BC<sup>2</sup>=AB<sup>2</sup>, то есть BС<sup>2</sup>=AB<sup>2</sup>-AC<sup>2</sup>, отсюда BС=&#8730;(AB<sup>2</sup>-AC<sup>2</sup>)=&#8730;("+AB+"<sup>2</sup>-"+AC+"<sup>2</sup>)=&#8730;("+Number(AB)*Number(AB)+"-"+Number(AC)*Number(AC)+")=&#8730;"+(Number(AB)*Number(AB)-Number(AC)*Number(AC))+"="+BC;
+    }
+    return {"A":A, "B":B, "AC":AC, "BC":BC, "AB":AB, "log":log};
+}
 function press() {
     let A = document.getElementById("angleA").value;
     let B = document.getElementById("angleB").value;
     let AC = document.getElementById("sideAC").value;
     let BC = document.getElementById("sideBC").value;
     let AB = document.getElementById("sideAB").value;
-    let log = document.getElementById("log");
-    log.textContent = "A="+A+" B="+B+" AC="+AC+" BC="+BC+" AB="+AB;
-    if (!isNumericOrEmpty(A)) {
-        log.innerHTML+="<br>Ошибка: поле A не пустое и не число";
-        return;
-    }
-    if (!isNumericOrEmpty(B)) {
-        log.innerHTML+="<br>Ошибка: поле B не пустое и не число";
-        return;
-    }
-    if (!isNumericOrEmpty(AC)) {
-        log.innerHTML+="<br>Ошибка: поле AC не пустое и не число";
-        return;
-    }
-    if (!isNumericOrEmpty(BC)) {
-        log.innerHTML+="<br>Ошибка: поле BC не пустое и не число";
-        return;
-    }
-    if (!isNumericOrEmpty(AB)) {
-        log.innerHTML+="<br>Ошибка: поле AB не пустое и не число";
-        return;
-    }
-    if (A !=="" && (Number(A) <= 0 || Number(A) >= 90)) {
-        log.innerHTML+="<br>Ошибка: ожидается значение угла A больше 0 и меньше 90, получено: "+Number(A);
-        return;
-    }
-    if (B !=="" && (Number(B) <= 0 || Number(B) >= 90)) {
-        log.innerHTML+="<br>Ошибка: ожидается значение угла B больше 0 и меньше 90, получено: "+Number(B);
-        return;
-    }
-    if (AC !== "" && Number(AC) <= 0) {
-        log.innerHTML+="<br>Ошибка: ожидается положительное значение катета AC, получено: "+Number(AC);
-        return;
-    }
-    if (BC !== "" && Number(BC) <= 0) {
-        log.innerHTML+="<br>Ошибка: ожидается положительное значение катета BC, получено: "+Number(BC);
-        return;
-    }
-    if (AB !== "" && Number(AB) <= 0) {
-        log.innerHTML+="<br>Ошибка: ожидается положительное значение гипотенузы AB, получено: "+Number(AB);
-        return;
-    }
-    if (A+B+AC+BC+AB==="") {
-        log.innerHTML+="<br>Введите две стороны или угол и сторону.";
-        return;
-    }
-    if (AC!=="" && AB+BC+A+B==="" || AB!=="" && BC+AC+A+B==="" || BC!=="" && AB+AC+A+B==="") {
-        log.innerHTML+="<br>Ошибка: недостаточное количество значений - введена только одна сторона. Введите две стороны или угол и сторону.";
-        return;
-    }
-    if (A!=="" && B!=="" && Number(A)+Number(B)!==90) {
-        log.innerHTML+="<br>Ошибка: для введенных углов не выполняется A+B=90, а именно A+B="+Number(A)+"+"+Number(B)+"="+(Number(A)+Number(B));
-        return;
-    }
-    if (A!=="" && AC!=="" && BC!=="" && !almostEqual(tanDegrees(A),Number(BC)/Number(AC))) {
-        log.innerHTML+="<br>Ошибка: для введенных данных не соблюдается tan(A)=BC/AC, а именно tan(A)="+tanDegrees(A)+", BC/AC="+Number(BC)+"/"+Number(AC)+"="+Number(BC)/Number(AC);
-        return;
-    }
-    if (B!=="" && AC!=="" && BC!=="" && !almostEqual(tanDegrees(B),Number(AC)/Number(BC))) {
-        log.innerHTML+="<br>Ошибка: для введенных данных не соблюдается tan(B)=AC/BC, а именно tan(B)="+tanDegrees(B)+", AC/BC="+Number(AC)+"/"+Number(BC)+"="+Number(AC)/Number(BC);
-        return;
-    }
-    if (A!=="" && AC!=="" && AB!=="" && !almostEqual(cosDegrees(A),Number(AC)/Number(AB))) {
-        log.innerHTML+="<br>Ошибка: для введенных данных не соблюдается cos(A)=AC/AB, а именно cos(A)="+cosDegrees(A)+", AC/AB="+Number(AC)+"/"+Number(AB)+"="+Number(AC)/Number(AB);
-        return;
-    }
-    if (B!=="" && BC!=="" && AB!=="" && !almostEqual(cosDegrees(B),Number(BC)/Number(AB))) {
-        log.innerHTML+="<br>Ошибка: для введенных данных не соблюдается cos(B)=BC/AB, а именно cos(B)="+cosDegrees(B)+", BC/AB="+Number(BC)+"/"+Number(AB)+"="+Number(BC)/Number(AB);
-        return;
-    }
-    if (A!=="" && BC!=="" && AB!=="" && !almostEqual(sinDegrees(A),Number(BC)/Number(AB))) {
-        log.innerHTML+="<br>Ошибка: для введенных данных не соблюдается sin(A)=BC/AB, а именно sin(A)="+sinDegrees(A)+", BC/AB="+Number(BC)+"/"+Number(AB)+"="+Number(BC)/Number(AB);
-        return;
-    }
-    if (B!=="" && AC!=="" && AB!=="" && !almostEqual(sinDegrees(B),Number(AC)/Number(AB))) {
-        log.innerHTML+="<br>Ошибка: для введенных данных не соблюдается sin(B)=AC/AB, а именно sin(B)="+sinDegrees(B)+", AC/AB="+Number(AC)+"/"+Number(AB)+"="+Number(AC)/Number(AB);
-        return;
-    }
-    if (AC !== "" && BC !== "" && AB !== "" && !almostEqual(Number(AC)*Number(AC)+Number(BC)*Number(BC), Number(AB)*Number(AB))) {
-        log.innerHTML+="<br>Ошибка: для введенных катетов и гепотенузы не выполняется теорема Пифагора AC<sup>2</sup>+BC<sup>2</sup>=AB<sup>2</sup>, а именно AB<sup>2</sup>="+AB+"<sup>2</sup>="+(Number(AB)*Number(AB))+", AC<sup>2</sup>+BC<sup>2</sup>="+AC+"<sup>2</sup>+"+BC+"<sup>2</sup>="+Number(AC)*Number(AC)+"+"+Number(BC)*Number(BC)+"="+(Number(AC)*Number(AC)+Number(BC)*Number(BC));
-        return;
-    }
-    if (AB+AC+BC==="") {
-        log.innerHTML+="<br>Введены только углы, последующие вычисления будут произведены при AB=100";
-        AB="100";
-    }
-    if (A === "" && B === "") {
-        if (AB !== "" && AC !== "") {
-            B=String(asinDegrees(Number(AC)/Number(AB)));
-            log.innerHTML+="<br>Катет AC и гипотенуза AB связаны с углом B формулой sin(B)=AC/AB, отсюда B=arcsin(AC/AB)=arcsin("+Number(AC)+"/"+Number(AB)+")=arcsin("+Number(AC)/Number(AB)+")="+B;
-            A=String(acosDegrees(Number(AC)/Number(AB)));
-            log.innerHTML+="<br>Катет AC и гипотенуза AB связаны с углом A формулой cos(A)=AC/AB, отсюда A=arccos(AC/AB)=arccos("+Number(AC)+"/"+Number(AB)+")=arccos("+Number(AC)/Number(AB)+")="+A;
-        }else if (AB !== "" && BC !== "") {
-            A=String(asinDegrees(Number(BC)/Number(AB)));
-            log.innerHTML+="<br>Катет BC и гипотенуза AB связаны с углом A формулой sin(A)=BC/AB, отсюда A=arcsin(BC/AB)=arcsin("+Number(BC)+"/"+Number(AB)+")=arcsin("+Number(BC)/Number(AB)+")="+A;
-            B=String(acosDegrees(Number(BC)/Number(AB)));
-            log.innerHTML+="<br>Катет BC и гипотенуза AB связаны с углом B формулой cos(B)=BC/AB, отсюда B=arccos(BC/AB)=arccos("+Number(BC)+"/"+Number(AB)+")=arccos("+Number(BC)/Number(AB)+")="+B;
-        }else if (BC !== "" && AC !== "") {
-            B=String(atanDegrees(Number(AC)/Number(BC)));
-            log.innerHTML+="<br>Катеты AC и BC связаны с углом B формулой tan(B)=AC/BС, отсюда B=arctan(AC/BC)=arctan("+Number(AC)+"/"+Number(BC)+")=arctan("+Number(AC)/Number(BC)+")="+B;
-            A=String(atanDegrees(Number(BC)/Number(AC)));
-            log.innerHTML+="<br>Катеты AC и BC связаны с углом A формулой tan(A)=BC/AC, отсюда A=arctan(BC/AC)=arctan("+Number(BC)+"/"+Number(AC)+")=arctan("+Number(BC)/Number(AC)+")="+A;
-        }
-    }
-    if (A !== "") {
-        if (B === "") {
-            B=String(90-Number(A));
-            log.innerHTML+="<br>Углы A и B связаны формулой A+B=90, отсюда B=90-A=90-"+A+"="+B;
-        }
-        if (AC !== "" && AB === "") {
-            AB=String(Number(AC)/cosDegrees(A));
-            log.innerHTML+="<br>Катет AC и гипотенуза AB связаны с углом A формулой cos(A)=AC/AB, отсюда AB=AC/cos(A)="+Number(AC)+"/cos("+A+")="+Number(AC)+"/"+cosDegrees(A)+"="+AB;
-        }
-        if (AC !== "" && BC === "") {
-            BC=String(Number(AC)*tanDegrees(A));
-            log.innerHTML+="<br>Катеты AC и BC связаны с углом A формулой tan(A)=BC/AC, отсюда BС=AC*tan(A)="+Number(AC)+"*tan("+A+")="+Number(AC)+"*"+tanDegrees(A)+"="+BC;
-        }
-        if (BC !== "" && AB === "") {
-            AB=String(Number(BC)/sinDegrees(A));
-            log.innerHTML+="<br>Катет BC и гипотенуза AB связаны с углом A формулой sin(A)=BC/AB, отсюда AB=BC/sin(A)="+Number(BC)+"/sin("+A+")="+Number(BC)+"/"+sinDegrees(A)+"="+AB;
-        }
-        if (BC !== "" && AC === "") {
-            AC=String(Number(BC)/tanDegrees(A));
-            log.innerHTML+="<br>Катеты AC и BC связаны с углом A формулой tan(A)=BC/AC, отсюда AС=BC/tan(A)="+Number(BC)+"/tan("+A+")="+Number(BC)+"/"+tanDegrees(A)+"="+AC;
-        }
-        if (AB !== "" && AC === "") {
-            AC=String(Number(AB)*cosDegrees(A));
-            log.innerHTML+="<br>Катет AC и гипотенуза AB связаны с углом A формулой cos(A)=AC/AB, отсюда AС=AB*cos(A)="+Number(AB)+"*cos("+A+")="+Number(AB)+"*"+cosDegrees(A)+"="+AC;
-        }
-        if (AB !== "" && BC === "") {
-            BC=String(Number(AB)*sinDegrees(A));
-            log.innerHTML+="<br>Катет BC и гипотенуза AB связаны с углом A формулой sin(A)=BC/AB, отсюда BС=AB*sin(A)="+Number(AB)+"*sin("+A+")="+Number(AB)+"*"+sinDegrees(A)+"="+BC;
-        }
-    }
-    if (B !== "") {
-        if (A === "") {
-            A=String(90-Number(B));
-            log.innerHTML+="<br>Углы A и B связаны формулой A+B=90, отсюда A=90-B=90-"+B+"="+A;
-        }
-        if (AC !== "" && AB === "") {
-            AB=String(Number(AC)/sinDegrees(B));
-            log.innerHTML+="<br>Катет AC и гипотенуза AB связаны с углом B формулой sin(B)=AC/AB, отсюда AB=AC/sin(B)="+Number(AC)+"/sin("+B+")="+Number(AC)+"/"+sinDegrees(B)+"="+AB;
-        }
-        if (AC !== "" && BC === "") {
-            BC=String(Number(AC)/tanDegrees(B));
-            log.innerHTML+="<br>Катеты AC и BC связаны с углом B формулой tan(B)=AC/BC, отсюда BС=AC/tan(B)="+Number(AC)+"/tan("+B+")="+Number(AC)+"/"+tanDegrees(B)+"="+BC;
-        }
-        if (BC !== "" && AB === "") {
-            AB=String(Number(BC)/cosDegrees(B));
-            log.innerHTML+="<br>Катет BC и гипотенуза AB связаны с углом B формулой cos(B)=BC/AB, отсюда AB=BC/cos(B)="+Number(BC)+"/cos("+B+")="+Number(BC)+"/"+cosDegrees(B)+"="+AB;
-        }
-        if (BC !== "" && AC === "") {
-            AC=String(Number(BC)*tanDegrees(B));
-            log.innerHTML+="<br>Катеты AC и BC связаны с углом B формулой tan(B)=AC/BC, отсюда AС=BC*tan(B)="+Number(BC)+"*tan("+B+")="+Number(BC)+"*"+tanDegrees(B)+"="+AC;
-        }
-        if (AB !== "" && AC === "") {
-            AC=String(Number(AB)*sinDegrees(B));
-            log.innerHTML+="<br>Катет AC и гипотенуза AB связаны с углом B формулой sin(B)=AC/AB, отсюда AС=AB*sin(B)="+Number(AB)+"*sin("+B+")="+Number(AB)+"*"+sinDegrees(B)+"="+AC;
-        }
-        if (AB !== "" && BC === "") {
-            BC=String(Number(AB)*cosDegrees(B));
-            log.innerHTML+="<br>Катет BC и гипотенуза AB связаны с углом B формулой cos(B)=BC/AB, отсюда BС=AB*cos(B)="+Number(AB)+"*cos("+B+")="+Number(AB)+"*"+cosDegrees(B)+"="+BC;
-        }
-    }
-    if (AC !== "" && BC !== "" && AB === "") {
-        AB=String(Math.sqrt(Number(AC)*Number(AC)+Number(BC)*Number(BC)))
-        log.innerHTML+="<br>Катеты AC и BC связаны с гипотенузой AB формулой AC<sup>2</sup>+BC<sup>2</sup>=AB<sup>2</sup>, отсюда AB=&#8730;(AC<sup>2</sup>+BC<sup>2</sup>)=&#8730;("+AC+"<sup>2</sup>+"+BC+"<sup>2</sup>)=&#8730;("+Number(AC)*Number(AC)+"+"+Number(BC)*Number(BC)+")=&#8730;"+(Number(AC)*Number(AC)+Number(BC)*Number(BC))+"="+AB;
-    }
-    if (AB !== "" && BC !== "" && AC === "") {
-        AC=String(Math.sqrt(Number(AB)*Number(AB)-Number(BC)*Number(BC)))
-        log.innerHTML+="<br>Катеты AC и BC связаны с гипотенузой AB формулой AC<sup>2</sup>+BC<sup>2</sup>=AB<sup>2</sup>, то есть AС<sup>2</sup>=AB<sup>2</sup>-BC<sup>2</sup>, отсюда AС=&#8730;(AB<sup>2</sup>-BC<sup>2</sup>)=&#8730;("+AB+"<sup>2</sup>-"+BC+"<sup>2</sup>)=&#8730;("+Number(AB)*Number(AB)+"-"+Number(BC)*Number(BC)+")=&#8730;"+(Number(AB)*Number(AB)-Number(BC)*Number(BC))+"="+AC;
-    }
-    if (AB !== "" && AC !== "" && BC === "") {
-        BC=String(Math.sqrt(Number(AB)*Number(AB)-Number(AC)*Number(AC)))
-        log.innerHTML+="<br>Катеты AC и BC связаны с гипотенузой AB формулой AC<sup>2</sup>+BC<sup>2</sup>=AB<sup>2</sup>, то есть BС<sup>2</sup>=AB<sup>2</sup>-AC<sup>2</sup>, отсюда BС=&#8730;(AB<sup>2</sup>-AC<sup>2</sup>)=&#8730;("+AB+"<sup>2</sup>-"+AC+"<sup>2</sup>)=&#8730;("+Number(AB)*Number(AB)+"-"+Number(AC)*Number(AC)+")=&#8730;"+(Number(AB)*Number(AB)-Number(AC)*Number(AC))+"="+BC;
-    }
+    let log = "";
+    ({A,B,AC,BC,AB,log} = calculateAll(A,B,AC,BC,AB));
+    document.getElementById("log").innerHTML = log;
 }
   </script>
  </head>
