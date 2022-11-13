@@ -255,6 +255,28 @@ function press() {
         "BC":document.getElementById("sideBC").value,
         "AB":document.getElementById("sideAB").value});
     document.getElementById("log").innerHTML = log;
+    if (A==="" || B==="" || AC==="" || BC==="" || AB==="") {
+        document.getElementById("canvas").style.display = "none";
+        return;
+    }
+    const maxLeg=Math.max(Number(AC),Number(BC));
+    const k=400/maxLeg;
+    const x=Number(BC)*k;
+    const y=Number(AC)*k;
+    document.getElementById("canvas").style.display = "block";
+    const canvas = document.getElementById('canvas');
+    canvas.width = 50 + x + 50;
+    canvas.height = 50 + y + 50;
+    if (canvas.getContext) {
+        const context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.beginPath();
+        context.moveTo(50, 50);
+        context.lineTo(50, 50+y);
+        context.lineTo(50+x, 50+y);
+        context.closePath();
+        context.stroke();
+    }
 }
 function test1(args,expectedResult) {
     let result = calculateAll(args);
@@ -708,7 +730,7 @@ selfTest();
   <p class="ИмяКласса1 ИмяКласса2">Длина катета AС: <input id="sideAC" type="text">, длина катета BC: <input id="sideBC" type="text">, длина гипотенузы AB: <input id="sideAB" type="text"> </p>
   <p><input type="button" onclick="press()" value="Рассчитать"></p>
   <p id="log">Здесь будет расчет</p>
-  <canvas id="triangle" width="150" height="150"></canvas>
+  <canvas id="canvas" width="500" height="500" style="display:none"></canvas>
   <p>Здесь будет рисунок на canvas</p>
  </body>
 </html>
