@@ -4,7 +4,42 @@
   <meta charset="utf-8">
   <title>Решение прямоугольного треугольника</title>
   <style>
-    /*CSS-код*/
+.frac {
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    letter-spacing: 0.001em;
+    text-align: center;
+}
+.frac > span {
+    display: block;
+    padding: 0.1em;
+}
+.frac span.bottom {
+    border-top: thin solid black;
+}
+.AB {
+    color: red;
+}
+.AB::before {
+    content: "AB";
+}
+.BC {
+    color: green;
+}
+.BC::before {
+    content: "BC";
+}
+.AC {
+    color: blue;
+}
+.AC::before {
+    content: "AC";
+}
+table, th, td {
+    border: 1px solid grey;
+    border-collapse: collapse;
+}
   </style>
   <script>
 function radiansToDegrees(radians) {
@@ -254,9 +289,11 @@ function press() {
         "AC":document.getElementById("sideAC").value,
         "BC":document.getElementById("sideBC").value,
         "AB":document.getElementById("sideAB").value});
-    document.getElementById("log").innerHTML = log;
+    const brPos = log.indexOf("<br>");
+    document.getElementById("log").innerHTML = log.substring(brPos+"<br>".length);
     if (A==="" || B==="" || AC==="" || BC==="" || AB==="") {
         document.getElementById("canvas").style.display = "none";
+        document.getElementById("table").style.display = "none";
         return;
     }
     const maxLeg=Math.max(Number(AC),Number(BC));
@@ -264,6 +301,7 @@ function press() {
     const x=Number(BC)*k;
     const y=Number(AC)*k;
     document.getElementById("canvas").style.display = "block";
+    document.getElementById("table").style.display = "block";
     const canvas = document.getElementById('canvas');
     canvas.width = 50 + x + 50;
     canvas.height = 50 + y + 50;
@@ -273,9 +311,26 @@ function press() {
         context.beginPath();
         context.moveTo(50, 50);
         context.lineTo(50, 50+y);
-        context.lineTo(50+x, 50+y);
-        context.closePath();
+        context.strokeStyle = "blue";
         context.stroke();
+
+        context.beginPath();
+        context.moveTo(50, 50+y);
+        context.lineTo(50+x, 50+y);
+        context.strokeStyle = "green";
+        context.stroke();
+
+        context.beginPath();
+        context.moveTo(50, 50);
+        context.lineTo(50+x, 50+y);
+        context.strokeStyle = "red";
+        context.stroke();
+
+        context.font = "24px Times New Roman";
+        context.fillStyle = "black";
+        context.fillText('A', 35, 45);
+        context.fillText('С', 35, 70+y);
+        context.fillText('B', 55+x, 70+y);
     }
 }
 function test1(args,expectedResult) {
@@ -720,7 +775,7 @@ selfTest();
   </script>
  </head>
  <body>
-  <img src="example.png" width="500" height="500" alt="Прямоугольный треугольник ABC с прямым углом C">
+  <img src="example2.png" width="500" height="500" alt="Прямоугольный треугольник ABC с прямым углом C">
   <p class="ИмяКласса1 ИмяКласса2">Введите на выбор:</p>
   <ul>
    <li>один угол и одну сторону</li>
@@ -729,8 +784,59 @@ selfTest();
   <p class="ИмяКласса1 ИмяКласса2">Угол A в градусах: <input id="angleA" type="text"> и угол B в градусах: <input id="angleB" type="text"> </p>
   <p class="ИмяКласса1 ИмяКласса2">Длина катета AС: <input id="sideAC" type="text">, длина катета BC: <input id="sideBC" type="text">, длина гипотенузы AB: <input id="sideAB" type="text"> </p>
   <p><input type="button" onclick="press()" value="Рассчитать"></p>
-  <p id="log">Здесь будет расчет</p>
+  <p id="log"></p>
   <canvas id="canvas" width="500" height="500" style="display:none"></canvas>
-  <p>Здесь будет рисунок на canvas</p>
+  <div id="table" style="display:none; margin-left: 50px;">
+   <table cellpadding="10">
+    <tr>
+     <th>Угол</th>
+     <th>sin</th>
+     <th>cos</th>
+     <th>tg</th>
+    </tr>
+    <tr>
+     <td style="text-align: center;">A</td>
+     <td>
+      <div class="frac">
+       <span class="BC"></span>
+       <span class="bottom AB"></span>
+      </div>
+     </td>
+     <td>
+      <div class="frac">
+       <span class="AC"></span>
+       <span class="bottom AB"></span>
+      </div>
+     </td>
+     <td>
+      <div class="frac">
+       <span class="BC"></span>
+       <span class="bottom AC"></span>
+      </div>
+     </td>
+    </tr>
+    <tr>
+     <td style="text-align: center;">B</td>
+     <td>
+      <div class="frac">
+       <span class="AC"></span>
+       <span class="bottom AB"></span>
+      </div>
+     </td>
+     <td>
+      <div class="frac">
+       <span class="BC"></span>
+       <span class="bottom AB"></span>
+      </div>
+     </td>
+     <td>
+      <div class="frac">
+       <span class="AC"></span>
+       <span class="bottom BC"></span>
+      </div>
+     </td>
+    </tr>
+   </table>
+  </div>
  </body>
 </html>
