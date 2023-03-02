@@ -293,7 +293,6 @@ function press() {
     document.getElementById("log").innerHTML = log.substring(brPos+"<br>".length);
     if (A==="" || B==="" || AC==="" || BC==="" || AB==="") {
         document.getElementById("canvas").style.display = "none";
-        document.getElementById("table").style.display = "none";
         return;
     }
     const maxLeg=Math.max(Number(AC),Number(BC));
@@ -301,7 +300,6 @@ function press() {
     const x=Number(BC)*k;
     const y=Number(AC)*k;
     document.getElementById("canvas").style.display = "block";
-    document.getElementById("table").style.display = "block";
     const canvas = document.getElementById('canvas');
     canvas.width = 50 + x + 50;
     canvas.height = 50 + y + 50;
@@ -775,84 +773,87 @@ selfTest();
   </script>
  </head>
  <body>
-  <div>
-   <div style="display: inline-block; vertical-align: middle;">
-    <img src="example.png" width="320" height="500" alt="Прямоугольный треугольник ABC с прямым углом C">
+  <div style="display: inline-block;">
+   <h1 style="text-align: center;">Решение прямоугольного треугольника</h1>
+   <div>
+    <div style="display: inline-block; vertical-align: middle;">
+     <img src="example.png" width="320" height="500" alt="Прямоугольный треугольник ABC с прямым углом C">
+    </div>
+    <div style="margin-left: 50px; display: inline-block; vertical-align: middle;">
+     <table cellpadding="10">
+      <tr>
+       <th>Угол</th>
+       <th>sin</th>
+       <th>cos</th>
+       <th>tg</th>
+       <th>ctg</th>
+      </tr>
+      <tr>
+       <td style="text-align: center;">A</td>
+       <td>
+        <div class="frac">
+         <span class="BC"></span>
+         <span class="bottom AB"></span>
+        </div>
+       </td>
+       <td>
+        <div class="frac">
+         <span class="AC"></span>
+         <span class="bottom AB"></span>
+        </div>
+       </td>
+       <td>
+        <div class="frac">
+         <span class="BC"></span>
+         <span class="bottom AC"></span>
+        </div>
+       </td>
+       <td>
+        <div class="frac">
+         <span class="AC"></span>
+         <span class="bottom BC"></span>
+        </div>
+       </td>
+      </tr>
+      <tr>
+       <td style="text-align: center;">B</td>
+       <td>
+        <div class="frac">
+         <span class="AC"></span>
+         <span class="bottom AB"></span>
+        </div>
+       </td>
+       <td>
+        <div class="frac">
+         <span class="BC"></span>
+         <span class="bottom AB"></span>
+        </div>
+       </td>
+       <td>
+        <div class="frac">
+         <span class="AC"></span>
+         <span class="bottom BC"></span>
+        </div>
+       </td>
+       <td>
+        <div class="frac">
+         <span class="BC"></span>
+         <span class="bottom AC"></span>
+        </div>
+       </td>
+      </tr>
+     </table>
+    </div>
    </div>
-   <div id="table" style="margin-left: 50px; display: inline-block; vertical-align: middle;">
-    <table cellpadding="10">
-     <tr>
-      <th>Угол</th>
-      <th>sin</th>
-      <th>cos</th>
-      <th>tg</th>
-      <th>ctg</th>
-     </tr>
-     <tr>
-      <td style="text-align: center;">A</td>
-      <td>
-       <div class="frac">
-        <span class="BC"></span>
-        <span class="bottom AB"></span>
-       </div>
-      </td>
-      <td>
-       <div class="frac">
-        <span class="AC"></span>
-        <span class="bottom AB"></span>
-       </div>
-      </td>
-      <td>
-       <div class="frac">
-        <span class="BC"></span>
-        <span class="bottom AC"></span>
-       </div>
-      </td>
-      <td>
-       <div class="frac">
-        <span class="AC"></span>
-        <span class="bottom BC"></span>
-       </div>
-      </td>
-     </tr>
-     <tr>
-      <td style="text-align: center;">B</td>
-      <td>
-       <div class="frac">
-        <span class="AC"></span>
-        <span class="bottom AB"></span>
-       </div>
-      </td>
-      <td>
-       <div class="frac">
-        <span class="BC"></span>
-        <span class="bottom AB"></span>
-       </div>
-      </td>
-      <td>
-       <div class="frac">
-        <span class="AC"></span>
-        <span class="bottom BC"></span>
-       </div>
-      </td>
-      <td>
-       <div class="frac">
-        <span class="BC"></span>
-        <span class="bottom AC"></span>
-       </div>
-      </td>
-     </tr>
-    </table>
-   </div>
+   <p>Введите на выбор:</p>
+   <ul>
+    <li>один угол и одну сторону</li>
+    <li>две стороны</li>
+   </ul>
+   <p>Угол A в градусах: <input id="angleA" type="text"> и угол B в градусах: <input id="angleB" type="text"> </p>
+   <p>Длина катета AС: <input id="sideAC" type="text">, длина катета BC: <input id="sideBC" type="text">, длина гипотенузы AB: <input id="sideAB" type="text"> </p>
+   <p><input type="button" onclick="press()" value="Рассчитать"></p>
   </div>
-  <p class="ИмяКласса1 ИмяКласса2">Введите на выбор:</p>
-  <ul>
-   <li>один угол и одну сторону</li>
-   <li>две стороны</li>
-  </ul>
-  <p class="ИмяКласса1 ИмяКласса2">Угол A в градусах: <input id="angleA" type="text"> и угол B в градусах: <input id="angleB" type="text"> </p>
-  <p class="ИмяКласса1 ИмяКласса2">Длина катета AС: <input id="sideAC" type="text">, длина катета BC: <input id="sideBC" type="text">, длина гипотенузы AB: <input id="sideAB" type="text"> </p>
-  <p><input type="button" onclick="press()" value="Рассчитать"></p>
   <p id="log"></p>
   <canvas id="canvas" width="500" height="500" style="display:none"></canvas>
  </body>
