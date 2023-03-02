@@ -775,7 +775,76 @@ selfTest();
   </script>
  </head>
  <body>
-  <img src="example.png" width="500" height="500" alt="Прямоугольный треугольник ABC с прямым углом C">
+  <div>
+   <div style="display: inline-block; vertical-align: middle;">
+    <img src="example.png" width="320" height="500" alt="Прямоугольный треугольник ABC с прямым углом C">
+   </div>
+   <div id="table" style="margin-left: 50px; display: inline-block; vertical-align: middle;">
+    <table cellpadding="10">
+     <tr>
+      <th>Угол</th>
+      <th>sin</th>
+      <th>cos</th>
+      <th>tg</th>
+      <th>ctg</th>
+     </tr>
+     <tr>
+      <td style="text-align: center;">A</td>
+      <td>
+       <div class="frac">
+        <span class="BC"></span>
+        <span class="bottom AB"></span>
+       </div>
+      </td>
+      <td>
+       <div class="frac">
+        <span class="AC"></span>
+        <span class="bottom AB"></span>
+       </div>
+      </td>
+      <td>
+       <div class="frac">
+        <span class="BC"></span>
+        <span class="bottom AC"></span>
+       </div>
+      </td>
+      <td>
+       <div class="frac">
+        <span class="AC"></span>
+        <span class="bottom BC"></span>
+       </div>
+      </td>
+     </tr>
+     <tr>
+      <td style="text-align: center;">B</td>
+      <td>
+       <div class="frac">
+        <span class="AC"></span>
+        <span class="bottom AB"></span>
+       </div>
+      </td>
+      <td>
+       <div class="frac">
+        <span class="BC"></span>
+        <span class="bottom AB"></span>
+       </div>
+      </td>
+      <td>
+       <div class="frac">
+        <span class="AC"></span>
+        <span class="bottom BC"></span>
+       </div>
+      </td>
+      <td>
+       <div class="frac">
+        <span class="BC"></span>
+        <span class="bottom AC"></span>
+       </div>
+      </td>
+     </tr>
+    </table>
+   </div>
+  </div>
   <p class="ИмяКласса1 ИмяКласса2">Введите на выбор:</p>
   <ul>
    <li>один угол и одну сторону</li>
@@ -786,57 +855,5 @@ selfTest();
   <p><input type="button" onclick="press()" value="Рассчитать"></p>
   <p id="log"></p>
   <canvas id="canvas" width="500" height="500" style="display:none"></canvas>
-  <div id="table" style="display:none; margin-left: 50px;">
-   <table cellpadding="10">
-    <tr>
-     <th>Угол</th>
-     <th>sin</th>
-     <th>cos</th>
-     <th>tg</th>
-    </tr>
-    <tr>
-     <td style="text-align: center;">A</td>
-     <td>
-      <div class="frac">
-       <span class="BC"></span>
-       <span class="bottom AB"></span>
-      </div>
-     </td>
-     <td>
-      <div class="frac">
-       <span class="AC"></span>
-       <span class="bottom AB"></span>
-      </div>
-     </td>
-     <td>
-      <div class="frac">
-       <span class="BC"></span>
-       <span class="bottom AC"></span>
-      </div>
-     </td>
-    </tr>
-    <tr>
-     <td style="text-align: center;">B</td>
-     <td>
-      <div class="frac">
-       <span class="AC"></span>
-       <span class="bottom AB"></span>
-      </div>
-     </td>
-     <td>
-      <div class="frac">
-       <span class="BC"></span>
-       <span class="bottom AB"></span>
-      </div>
-     </td>
-     <td>
-      <div class="frac">
-       <span class="AC"></span>
-       <span class="bottom BC"></span>
-      </div>
-     </td>
-    </tr>
-   </table>
-  </div>
  </body>
 </html>
